@@ -87,7 +87,7 @@ export function YearlyChart({
               isMobile
                 ? undefined
                 : {
-                    value: "Reproducciones",
+                    value: "Plays",
                     angle: -90,
                     position: "insideLeft",
                     offset: 12,
@@ -109,7 +109,7 @@ export function YearlyChart({
               isMobile
                 ? undefined
                 : {
-                    value: "Horas",
+                    value: "Hours",
                     angle: 90,
                     position: "insideRight",
                     offset: 12,
@@ -121,11 +121,11 @@ export function YearlyChart({
           <Tooltip
             contentStyle={tooltipStyle}
             formatter={(value: number, name: string) => {
-              if (name === "Reproducciones") return [value.toLocaleString("es-ES"), name];
-              if (name === "Horas") return [`${value.toLocaleString("es-ES")} h`, name];
+              if (name === "Plays") return [value.toLocaleString("en-US"), name];
+              if (name === "Hours") return [`${value.toLocaleString("en-US")} h`, name];
               return [value, name];
             }}
-            labelFormatter={(label) => `Año ${label}`}
+            labelFormatter={(label) => `Year ${label}`}
           />
           <Legend
             wrapperStyle={{ paddingTop: isMobile ? 8 : 16, fontSize: isMobile ? 11 : 12 }}
@@ -134,7 +134,7 @@ export function YearlyChart({
           <Bar
             yAxisId="streams"
             dataKey="streams"
-            name="Reproducciones"
+            name="Plays"
             fill="#1DB954"
             radius={[4, 4, 0, 0]}
             maxBarSize={isMobile ? 24 : 48}
@@ -143,7 +143,7 @@ export function YearlyChart({
             yAxisId="hours"
             type="monotone"
             dataKey="hours"
-            name="Horas"
+            name="Hours"
             stroke="#509bf5"
             strokeWidth={isMobile ? 2 : 2.5}
             dot={isMobile ? false : { r: 4, fill: "#509bf5", strokeWidth: 0 }}
@@ -157,10 +157,10 @@ export function YearlyChart({
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-white/5 text-[10px] uppercase tracking-wide text-zinc-500 sm:text-xs">
-              <th className="px-3 py-2.5 font-medium sm:px-4 sm:py-3">Año</th>
-              <th className="px-3 py-2.5 font-medium text-right sm:px-4 sm:py-3">Repro.</th>
-              <th className="px-3 py-2.5 font-medium text-right sm:px-4 sm:py-3">Horas</th>
-              <th className="hidden px-3 py-2.5 font-medium text-right sm:table-cell sm:px-4 sm:py-3">Media</th>
+              <th className="px-3 py-2.5 font-medium sm:px-4 sm:py-3">Year</th>
+              <th className="px-3 py-2.5 font-medium text-right sm:px-4 sm:py-3">Plays</th>
+              <th className="px-3 py-2.5 font-medium text-right sm:px-4 sm:py-3">Hours</th>
+              <th className="hidden px-3 py-2.5 font-medium text-right sm:table-cell sm:px-4 sm:py-3">Avg</th>
               <th className="px-3 py-2.5 font-medium text-right sm:px-4 sm:py-3">Skip</th>
             </tr>
           </thead>
@@ -169,10 +169,10 @@ export function YearlyChart({
               <tr key={row.year} className="border-b border-white/5 last:border-0 hover:bg-white/5">
                 <td className="px-3 py-2 font-medium text-white sm:px-4 sm:py-2.5">{row.year}</td>
                 <td className="px-3 py-2 text-right text-zinc-300 sm:px-4 sm:py-2.5">
-                  {row.streams.toLocaleString("es-ES")}
+                  {row.streams.toLocaleString("en-US")}
                 </td>
                 <td className="px-3 py-2 text-right text-blue-400 sm:px-4 sm:py-2.5">
-                  {row.hours.toLocaleString("es-ES")} h
+                  {row.hours.toLocaleString("en-US")} h
                 </td>
                 <td className="hidden px-3 py-2 text-right text-zinc-400 sm:table-cell sm:px-4 sm:py-2.5">
                   {row.avgMinutes ?? "—"} min
@@ -239,11 +239,11 @@ export function MonthlyTrendChart({
           contentStyle={tooltipStyle}
           labelFormatter={(l) => {
             const [y, m] = String(l).split("-");
-            const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             return `${months[parseInt(m, 10) - 1]} ${y}`;
           }}
           formatter={(value: number, name: string) => [
-            name === "Horas" ? `${value.toLocaleString("es-ES")} h` : value.toLocaleString("es-ES"),
+            name === "Hours" ? `${value.toLocaleString("en-US")} h` : value.toLocaleString("en-US"),
             name,
           ]}
         />
@@ -251,7 +251,7 @@ export function MonthlyTrendChart({
         <Bar
           yAxisId="streams"
           dataKey="streams"
-          name="Reproducciones"
+          name="Plays"
           fill="#1DB954"
           radius={[2, 2, 0, 0]}
           maxBarSize={isMobile ? 6 : 12}
@@ -261,7 +261,7 @@ export function MonthlyTrendChart({
           yAxisId="hours"
           type="monotone"
           dataKey="hours"
-          name="Horas"
+          name="Hours"
           stroke="#509bf5"
           strokeWidth={isMobile ? 1.5 : 2}
           dot={false}
@@ -368,7 +368,7 @@ export function HourHeatmap({
               style={{
                 backgroundColor: `rgba(29, 185, 84, ${0.15 + intensity * 0.85})`,
               }}
-              title={`${d.hour}:00 — ${d.count.toLocaleString("es-ES")} streams`}
+              title={`${d.hour}:00 — ${d.count.toLocaleString("en-US")} streams`}
             />
             <span className="text-[8px] text-zinc-500 sm:text-[10px]">{d.hour}</span>
           </div>
@@ -394,7 +394,7 @@ export function DayOfWeekChart({
         <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fontSize: isMobile ? 10 : 12 }} />
         <YAxis tickLine={false} axisLine={false} width={isMobile ? 28 : 40} tick={{ fontSize: isMobile ? 9 : 11 }} />
         <Tooltip contentStyle={tooltipStyle} />
-        <Bar dataKey="count" name="Reproducciones" fill="#8d67ab" radius={[4, 4, 0, 0]} maxBarSize={isMobile ? 28 : 40} />
+        <Bar dataKey="count" name="Plays" fill="#8d67ab" radius={[4, 4, 0, 0]} maxBarSize={isMobile ? 28 : 40} />
       </BarChart>
       </ResponsiveContainer>
     </ChartContainer>
@@ -420,12 +420,12 @@ export function SkipRateChart({
           contentStyle={tooltipStyle}
           formatter={(value: number, name: string) => [
             name === "skipRate" ? `${value}%` : `${value} min`,
-            name === "skipRate" ? "Tasa de skip" : "Duración media",
+            name === "skipRate" ? "Skip rate" : "Average duration",
           ]}
         />
         <Legend />
-        <Line type="monotone" dataKey="skipRate" name="Tasa de skip" stroke="#e91429" strokeWidth={2} dot={isMobile ? false : { r: 3 }} />
-        <Line type="monotone" dataKey="avgMinutes" name="Duración media" stroke="#f59b23" strokeWidth={2} dot={isMobile ? false : { r: 3 }} />
+        <Line type="monotone" dataKey="skipRate" name="Skip rate" stroke="#e91429" strokeWidth={2} dot={isMobile ? false : { r: 3 }} />
+        <Line type="monotone" dataKey="avgMinutes" name="Average duration" stroke="#f59b23" strokeWidth={2} dot={isMobile ? false : { r: 3 }} />
       </LineChart>
       </ResponsiveContainer>
     </ChartContainer>
@@ -433,10 +433,14 @@ export function SkipRateChart({
 }
 
 const GENRE_COLORS: Record<string, string> = {
+  Other: "#555555",
   Otros: "#555555",
   Podcast: "#8d67ab",
+  Audiobook: "#f59b23",
   Audiolibro: "#f59b23",
+  Video: "#e91429",
   Vídeo: "#e91429",
+  Unclassified: "#666666",
   "Sin clasificar": "#666666",
 };
 
@@ -454,7 +458,7 @@ export function YearlyGenreChart({
   mode?: "count" | "time";
 }) {
   const isMobile = useIsMobile();
-  const unit = mode === "time" ? "min" : "reproducciones";
+  const unit = mode === "time" ? "min" : "plays";
   const height = isMobile ? 280 : 380;
 
   return (
@@ -479,15 +483,15 @@ export function YearlyGenreChart({
           />
           <Tooltip
             contentStyle={tooltipStyle}
-            labelFormatter={(label) => `Año ${label}`}
+            labelFormatter={(label) => `Year ${label}`}
             formatter={(value: number, name: string, props) => {
               const row = props.payload as Record<string, number>;
               const pctKey = `${name}_pct`;
               const pct = row[pctKey];
               const display =
                 mode === "time"
-                  ? `${Math.round(value as number).toLocaleString("es-ES")} min`
-                  : (value as number).toLocaleString("es-ES");
+                  ? `${Math.round(value as number).toLocaleString("en-US")} min`
+                  : (value as number).toLocaleString("en-US");
               return [`${display}${pct != null ? ` (${pct}%)` : ""}`, name];
             }}
           />
@@ -511,7 +515,7 @@ export function YearlyGenreChart({
         </ResponsiveContainer>
       </ChartContainer>
       <p className="text-center text-[11px] text-zinc-500 sm:text-xs">
-        Distribución porcentual por año · datos por {unit} (género principal del artista vía Spotify API)
+        Percentage distribution per year · data by {unit} (artist primary genre via Spotify API)
       </p>
     </div>
   );
@@ -543,7 +547,7 @@ export function GenreLineTrendChart({
         />
         <Tooltip
           contentStyle={tooltipStyle}
-          labelFormatter={(label) => `Año ${label}`}
+          labelFormatter={(label) => `Year ${label}`}
           formatter={(value: number, name: string) => [`${value}%`, name]}
         />
         <Legend wrapperStyle={{ paddingTop: 8, fontSize: isMobile ? 10 : 12 }} />

@@ -41,7 +41,7 @@ function topNMs(map, n = 50) {
 }
 
 function normalizePlatform(p) {
-  if (!p) return "Desconocido";
+  if (!p) return "Unknown";
   const lower = p.toLowerCase();
   if (lower.includes("ios") || lower.includes("iphone") || lower.includes("ipad")) return "iOS";
   if (lower.includes("android")) return "Android";
@@ -93,7 +93,7 @@ function yearKey(d) {
   return String(d.getUTCFullYear());
 }
 
-console.log("Procesando historial de Spotify...");
+console.log("Processing Spotify history...");
 
 const genresEnabled = hasSpotifyCredentials();
 const genreCache = genresEnabled ? await ensureGenreCache() : { enabled: false, artists: {} };
@@ -102,7 +102,7 @@ const yearGenreMs = {};
 const globalGenreCounts = {};
 
 if (!genresEnabled) {
-  console.log("ℹ Sin credenciales Spotify en .env — sección de géneros omitida");
+  console.log("ℹ No Spotify credentials in .env — genres section omitted");
 }
 
 const files = fs
@@ -150,7 +150,7 @@ const stats = {
   },
   hourOfDay: Array.from({ length: 24 }, (_, i) => ({ hour: i, count: 0, ms: 0 })),
   dayOfWeek: Array.from({ length: 7 }, (_, i) => ({
-    day: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"][i],
+    day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][i],
     count: 0,
     ms: 0,
   })),
@@ -278,8 +278,8 @@ for (const file of files) {
     if (genresEnabled && isValidYear(y)) {
       let genre;
       if (contentType === "podcast") genre = "Podcast";
-      else if (contentType === "audiobook") genre = "Audiolibro";
-      else if (contentType === "video") genre = "Vídeo";
+      else if (contentType === "audiobook") genre = "Audiobook";
+      else if (contentType === "video") genre = "Video";
       else genre = formatGenreLabel(getPrimaryGenre(artist, genreCache));
 
       if (!yearGenreCounts[y]) yearGenreCounts[y] = {};
@@ -366,8 +366,8 @@ function buildYearlyGenreSeries(countsByYear) {
         others += count;
       }
     }
-    row.Otros = others;
-    row.Otros_pct = Math.round((others / total) * 1000) / 10;
+    row.Other = others;
+    row.Other_pct = Math.round((others / total) * 1000) / 10;
     return row;
   });
 }
@@ -426,7 +426,7 @@ const output = {
           topGenres,
           trend: genreTrend,
           trendByTime: genreTrendByTime,
-          series: [...topGenreNames, "Otros"],
+          series: [...topGenreNames, "Other"],
           artistsWithGenre: Object.values(genreCache.artists).filter((a) => a.genres?.length > 0).length,
           artistsTotal: Object.keys(genreCache.artists).length,
         },
@@ -473,10 +473,10 @@ const output = {
 fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
 fs.writeFileSync(OUTPUT, JSON.stringify(output, null, 2));
 
-console.log(`✓ ${stats.totals.streams.toLocaleString()} streams procesados (${stats.skippedRows} timestamps inválidos descartados)`);
-console.log(`✓ ${audioFiles.length} archivos audio + ${videoFiles.length} archivos vídeo`);
-console.log(`✓ ${output.totals.hoursListened.toLocaleString()} horas · ${firstYear}–${lastYear}`);
+console.log(`✓ ${stats.totals.streams.toLocaleString()} streams processed (${stats.skippedRows} invalid timestamps skipped)`);
+console.log(`✓ ${audioFiles.length} audio files + ${videoFiles.length} video files`);
+console.log(`✓ ${output.totals.hoursListened.toLocaleString()} hours · ${firstYear}–${lastYear}`);
 if (genresEnabled && topGenreNames.length > 0) {
-  console.log(`✓ Géneros: ${topGenres.length} principales · tendencia ${validYears.length} años`);
+  console.log(`✓ Genres: ${topGenres.length} top genres · ${validYears.length}-year trend`);
 }
-console.log(`✓ Guardado en public/stats.json`);
+console.log(`✓ Saved to public/stats.json`);

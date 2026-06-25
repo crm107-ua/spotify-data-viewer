@@ -111,7 +111,7 @@ export async function ensureGenreCache({ force = false } = {}) {
   const clientId = env.SPOTIFY_CLIENT_ID;
   const clientSecret = env.SPOTIFY_CLIENT_SECRET;
 
-  console.log(`Obteniendo géneros de Spotify para ${pending.length.toLocaleString()} artistas...`);
+  console.log(`Fetching Spotify genres for ${pending.length.toLocaleString()} artists...`);
   const token = await getAccessToken(clientId, clientSecret);
 
   const artistToId = new Map();
@@ -158,36 +158,38 @@ export async function ensureGenreCache({ force = false } = {}) {
 
   saveCache(cache);
   const withGenres = Object.values(cache.artists).filter((a) => a.genres?.length > 0).length;
-  console.log(`✓ Caché de géneros: ${withGenres.toLocaleString()} artistas con género`);
+  console.log(`✓ Genre cache: ${withGenres.toLocaleString()} artists with genre`);
   return { ...cache, enabled: true };
 }
 
 export function getPrimaryGenre(artistName, cache) {
   const entry = cache.artists[artistName];
-  if (!entry?.genres?.length) return "Sin clasificar";
+  if (!entry?.genres?.length) return "Unclassified";
   return entry.genres[0];
 }
 
 export function formatGenreLabel(genre) {
   const map = {
-    "sin clasificar": "Sin clasificar",
+    unclassified: "Unclassified",
     podcast: "Podcast",
+    audiobook: "Audiobook",
+    video: "Video",
     "latin pop": "Latin pop",
     "urbano latino": "Urbano latino",
     reggaeton: "Reggaetón",
     "pop urbano": "Pop urbano",
-    "música mexicana": "Música mexicana",
-    "música urbana latina": "Música urbana latina",
+    "música mexicana": "Mexican music",
+    "música urbana latina": "Latin urban music",
     "dance pop": "Dance pop",
     "electro house": "Electro house",
     "edm pop": "EDM pop",
     "indie pop": "Indie pop",
-    "modern rock": "Rock moderno",
-    "classic rock": "Rock clásico",
+    "modern rock": "Modern rock",
+    "classic rock": "Classic rock",
     "hip hop": "Hip hop",
     "r&b": "R&B",
     "nu metal": "Nu metal",
-    "alternative metal": "Metal alternativo",
+    "alternative metal": "Alternative metal",
   };
   const key = genre.toLowerCase();
   if (map[key]) return map[key];

@@ -85,14 +85,14 @@ export interface DashboardStats {
 }
 
 export function formatNumber(n: number): string {
-  return n.toLocaleString("es-ES");
+  return n.toLocaleString("en-US");
 }
 
 export function formatDate(iso: string | null): string {
   if (!iso) return "—";
   const d = new Date(iso);
   if (isNaN(d.getTime()) || d.getFullYear() > 2030 || d.getFullYear() < 2010) return "—";
-  return d.toLocaleDateString("es-ES", {
+  return d.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -100,10 +100,10 @@ export function formatDate(iso: string | null): string {
 }
 
 export const CONTENT_LABELS: Record<string, string> = {
-  music: "Música",
+  music: "Music",
   podcast: "Podcasts",
-  audiobook: "Audiolibros",
-  video: "Vídeo",
+  audiobook: "Audiobooks",
+  video: "Video",
 };
 
 export const CHART_COLORS = [
