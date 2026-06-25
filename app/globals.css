@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0a0a;
+  --card: #141414;
+  --card-hover: #1a1a1a;
+  --border: #2a2a2a;
+  --text: #ffffff;
+  --muted: #a3a3a3;
+  --accent: #1db954;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-white/5 bg-[#141414] p-6 shadow-xl shadow-black/20;
+  }
+
+  .stat-value {
+    @apply text-3xl font-bold tracking-tight text-white md:text-4xl;
+  }
+
+  .stat-label {
+    @apply text-sm font-medium text-zinc-400;
+  }
+
+  .section-title {
+    @apply text-xl font-semibold tracking-tight text-white md:text-2xl;
+  }
+
+  .section-subtitle {
+    @apply mt-1 text-sm text-zinc-500;
+  }
+}
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #2a2a2a;
+}
+
+.recharts-text {
+  fill: #a3a3a3;
+  font-size: 12px;
+}

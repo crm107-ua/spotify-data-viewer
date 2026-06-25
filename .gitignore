@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+.env
+.env.local
+.DS_Store
+*.log
+public/stats.json
+data/genre-cache.json
+
+# Datos personales de streaming (cada usuario importa los suyos)
+data/*
+!data/.gitkeep
