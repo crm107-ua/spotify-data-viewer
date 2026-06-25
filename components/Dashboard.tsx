@@ -18,6 +18,7 @@ import {
   WifiOff,
 } from "lucide-react";
 import { Card } from "@/components/Card";
+import { ScrollTable } from "@/components/ChartContainer";
 import { StatCard } from "@/components/StatCard";
 import {
   DayOfWeekChart,
@@ -52,17 +53,19 @@ function RankedList({
       {items.map((item, i) => (
         <li
           key={`${item.name}-${i}`}
-          className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-white/5"
+          className="flex items-start gap-2.5 rounded-lg px-1.5 py-2 transition-colors active:bg-white/5 sm:items-center sm:gap-3 sm:px-2"
         >
           <span
-            className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
+            className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold sm:h-7 sm:w-7 sm:text-xs ${
               i < 3 ? "bg-spotify-green text-black" : "bg-white/10 text-zinc-400"
             }`}
           >
             {i + 1}
           </span>
-          <span className="min-w-0 flex-1 truncate text-sm text-zinc-200">{item.name}</span>
-          <span className="shrink-0 text-sm font-medium text-zinc-400">
+          <span className="min-w-0 flex-1 text-xs leading-snug text-zinc-200 sm:truncate sm:text-sm line-clamp-2 sm:line-clamp-none">
+            {item.name}
+          </span>
+          <span className="shrink-0 pt-0.5 text-xs font-medium text-zinc-400 sm:pt-0 sm:text-sm">
             {formatValue(item[valueKey] as number)}
           </span>
         </li>
@@ -75,8 +78,8 @@ function HabitBar({ label, value, total, color }: { label: string; value: number
   const pct = total ? (value / total) * 100 : 0;
   return (
     <div>
-      <div className="mb-1 flex justify-between text-sm">
-        <span className="text-zinc-400">{label}</span>
+      <div className="mb-1 flex justify-between gap-2 text-xs sm:text-sm">
+        <span className="min-w-0 text-zinc-400 leading-snug">{label}</span>
         <span className="font-medium text-white">{pct.toFixed(1)}%</span>
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-white/10">
@@ -102,64 +105,71 @@ export function Dashboard({ stats }: DashboardProps) {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-spotify-green">
-              <Music2 className="h-5 w-5 text-black" />
+      <header className="sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/95 backdrop-blur-xl supports-[backdrop-filter]:bg-[#0a0a0a]/80">
+        <div className="mx-auto max-w-7xl px-3 py-3 sm:px-6 sm:py-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-spotify-green sm:h-10 sm:w-10">
+                <Music2 className="h-4 w-4 text-black sm:h-5 sm:w-5" />
+              </div>
+              <div className="min-w-0">
+                <h1 className="truncate text-base font-bold text-white sm:text-lg md:text-xl">
+                  Spotify Data Viewer
+                </h1>
+                <p className="truncate text-[10px] text-zinc-500 sm:text-xs">
+                  {formatDate(stats.totals.firstStream)} — {formatDate(stats.totals.lastStream)}
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-lg font-bold text-white sm:text-xl">Spotify Data Viewer</h1>
-              <p className="text-xs text-zinc-500">
-                {formatDate(stats.totals.firstStream)} — {formatDate(stats.totals.lastStream)}
-              </p>
+            <div className="hidden shrink-0 text-right text-xs text-zinc-500 md:block">
+              <p>{stats.fileCount} archivos procesados</p>
+              <p>Actualizado: {new Date(stats.generatedAt).toLocaleString("es-ES")}</p>
             </div>
           </div>
-          <div className="hidden text-right text-xs text-zinc-500 sm:block">
-            <p>{stats.fileCount} archivos procesados</p>
-            <p>Actualizado: {new Date(stats.generatedAt).toLocaleString("es-ES")}</p>
-          </div>
+          <p className="mt-2 border-t border-white/5 pt-2 text-[10px] text-zinc-500 md:hidden">
+            {stats.fileCount} archivos · {new Date(stats.generatedAt).toLocaleDateString("es-ES")}
+          </p>
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6">
+      <main className="mx-auto max-w-7xl space-y-5 px-3 py-5 sm:space-y-8 sm:px-6 sm:py-8">
         {/* Cobertura de datos */}
         {stats.coverage && (
           <section className="card border-spotify-green/20 bg-gradient-to-br from-spotify-green/5 to-transparent">
-            <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-spotify-green/20 text-spotify-green">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-spotify-green/20 text-spotify-green sm:h-11 sm:w-11">
                 <Database className="h-5 w-5" />
               </div>
-              <div className="flex-1">
-                <h2 className="text-lg font-semibold text-white">Cobertura completa de datos</h2>
-                <p className="mt-1 text-sm text-zinc-400">
+              <div className="min-w-0 flex-1">
+                <h2 className="text-base font-semibold text-white sm:text-lg">Cobertura completa de datos</h2>
+                <p className="mt-1 text-xs leading-relaxed text-zinc-400 sm:text-sm">
                   Se procesaron los{" "}
                   <strong className="text-white">{stats.coverage.totalFiles} archivos JSON</strong> de{" "}
                   <code className="text-spotify-green">data/</code>:{" "}
                   {stats.coverage.audioFiles} de audio y {stats.coverage.videoFiles} de vídeo.
                 </p>
-                <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                  <div className="rounded-lg bg-black/30 px-4 py-3">
-                    <p className="text-xs text-zinc-500">Registros en archivos</p>
-                    <p className="text-lg font-bold text-white">
+                <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-4 sm:gap-3 lg:grid-cols-4">
+                  <div className="rounded-lg bg-black/30 px-3 py-2.5 sm:px-4 sm:py-3">
+                    <p className="text-[10px] text-zinc-500 sm:text-xs">Registros en archivos</p>
+                    <p className="text-base font-bold text-white sm:text-lg">
                       {formatNumber(stats.coverage.totalRecordsInFiles)}
                     </p>
                   </div>
-                  <div className="rounded-lg bg-black/30 px-4 py-3">
-                    <p className="text-xs text-zinc-500">Streams procesados</p>
-                    <p className="text-lg font-bold text-spotify-green">
+                  <div className="rounded-lg bg-black/30 px-3 py-2.5 sm:px-4 sm:py-3">
+                    <p className="text-[10px] text-zinc-500 sm:text-xs">Streams procesados</p>
+                    <p className="text-base font-bold text-spotify-green sm:text-lg">
                       {formatNumber(stats.coverage.processedStreams)}
                     </p>
                   </div>
-                  <div className="rounded-lg bg-black/30 px-4 py-3">
-                    <p className="text-xs text-zinc-500">Audio / Vídeo</p>
-                    <p className="text-lg font-bold text-white">
+                  <div className="rounded-lg bg-black/30 px-3 py-2.5 sm:px-4 sm:py-3">
+                    <p className="text-[10px] text-zinc-500 sm:text-xs">Audio / Vídeo</p>
+                    <p className="text-sm font-bold text-white sm:text-lg">
                       {formatNumber(stats.coverage.audioStreams)} / {formatNumber(stats.coverage.videoStreams)}
                     </p>
                   </div>
-                  <div className="rounded-lg bg-black/30 px-4 py-3">
-                    <p className="text-xs text-zinc-500">Timestamps inválidos</p>
-                    <p className="text-lg font-bold text-zinc-400">
+                  <div className="rounded-lg bg-black/30 px-3 py-2.5 sm:px-4 sm:py-3">
+                    <p className="text-[10px] text-zinc-500 sm:text-xs">Timestamps inválidos</p>
+                    <p className="text-base font-bold text-zinc-400 sm:text-lg">
                       {stats.coverage.skippedInvalidTimestamps}
                     </p>
                   </div>
@@ -170,7 +180,7 @@ export function Dashboard({ stats }: DashboardProps) {
         )}
 
         {/* KPIs */}
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <StatCard
             icon={Play}
             label="Total reproducciones"
@@ -214,12 +224,12 @@ export function Dashboard({ stats }: DashboardProps) {
             title="Tendencia de géneros a lo largo de los años"
             subtitle={`Géneros obtenidos de la API de Spotify · ${stats.genres.artistsWithGenre.toLocaleString("es-ES")} artistas clasificados`}
             action={
-              <div className="flex rounded-lg border border-white/10 p-0.5 text-xs">
+              <div className="flex w-full rounded-lg border border-white/10 p-0.5 text-xs sm:w-auto">
                 <button
                   type="button"
                   onClick={() => setGenreMode("count")}
-                  className={`rounded-md px-3 py-1.5 transition-colors ${
-                    genreMode === "count" ? "bg-spotify-green text-black" : "text-zinc-400 hover:text-white"
+                  className={`min-h-10 flex-1 rounded-md px-3 py-2 transition-colors sm:min-h-0 sm:flex-none sm:py-1.5 ${
+                    genreMode === "count" ? "bg-spotify-green text-black" : "text-zinc-400 active:text-white"
                   }`}
                 >
                   Reproducciones
@@ -227,8 +237,8 @@ export function Dashboard({ stats }: DashboardProps) {
                 <button
                   type="button"
                   onClick={() => setGenreMode("time")}
-                  className={`rounded-md px-3 py-1.5 transition-colors ${
-                    genreMode === "time" ? "bg-spotify-green text-black" : "text-zinc-400 hover:text-white"
+                  className={`min-h-10 flex-1 rounded-md px-3 py-2 transition-colors sm:min-h-0 sm:flex-none sm:py-1.5 ${
+                    genreMode === "time" ? "bg-spotify-green text-black" : "text-zinc-400 active:text-white"
                   }`}
                 >
                   Tiempo
@@ -280,7 +290,7 @@ export function Dashboard({ stats }: DashboardProps) {
         )}
 
         {/* Monthly + content type */}
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-5 sm:gap-6 lg:grid-cols-3">
           <Card
             className="lg:col-span-2"
             title="Tendencia mensual"
@@ -346,11 +356,11 @@ export function Dashboard({ stats }: DashboardProps) {
         <div className="grid gap-6 lg:grid-cols-2">
           <Card title="Plataformas" subtitle="Dónde escuchas música">
             <HorizontalBarChart data={platformChartData} />
-            <div className="mt-4 grid grid-cols-2 gap-2">
+            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {stats.platforms.slice(0, 6).map((p) => (
-                <div key={p.name} className="rounded-lg bg-white/5 px-3 py-2 text-xs">
-                  <span className="text-zinc-400">{p.name}</span>
-                  <span className="float-right font-medium text-white">{p.pct}%</span>
+                <div key={p.name} className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2 text-xs">
+                  <span className="truncate text-zinc-400">{p.name}</span>
+                  <span className="ml-2 shrink-0 font-medium text-white">{p.pct}%</span>
                 </div>
               ))}
             </div>
@@ -386,25 +396,25 @@ export function Dashboard({ stats }: DashboardProps) {
               <HabitBar label="Modo offline" value={stats.habits.offline} total={stats.totals.streams} color="#f59b23" />
               <HabitBar label="Sesión privada (incognito)" value={stats.habits.privateSession} total={stats.totals.streams} color="#509bf5" />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-xl bg-white/5 p-4 text-center">
-                <SkipForward className="mx-auto mb-2 h-6 w-6 text-red-400" />
-                <p className="text-2xl font-bold">{stats.habits.skipRate}%</p>
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-4">
+              <div className="rounded-xl bg-white/5 p-3 text-center sm:p-4">
+                <SkipForward className="mx-auto mb-1.5 h-5 w-5 text-red-400 sm:mb-2 sm:h-6 sm:w-6" />
+                <p className="text-xl font-bold sm:text-2xl">{stats.habits.skipRate}%</p>
                 <p className="text-xs text-zinc-500">Tasa de skip</p>
               </div>
-              <div className="rounded-xl bg-white/5 p-4 text-center">
-                <Shuffle className="mx-auto mb-2 h-6 w-6 text-purple-400" />
-                <p className="text-2xl font-bold">{stats.habits.shuffleRate}%</p>
+              <div className="rounded-xl bg-white/5 p-3 text-center sm:p-4">
+                <Shuffle className="mx-auto mb-1.5 h-5 w-5 text-purple-400 sm:mb-2 sm:h-6 sm:w-6" />
+                <p className="text-xl font-bold sm:text-2xl">{stats.habits.shuffleRate}%</p>
                 <p className="text-xs text-zinc-500">Con shuffle</p>
               </div>
-              <div className="rounded-xl bg-white/5 p-4 text-center">
-                <WifiOff className="mx-auto mb-2 h-6 w-6 text-orange-400" />
-                <p className="text-2xl font-bold">{stats.habits.offlineRate}%</p>
+              <div className="rounded-xl bg-white/5 p-3 text-center sm:p-4">
+                <WifiOff className="mx-auto mb-1.5 h-5 w-5 text-orange-400 sm:mb-2 sm:h-6 sm:w-6" />
+                <p className="text-xl font-bold sm:text-2xl">{stats.habits.offlineRate}%</p>
                 <p className="text-xs text-zinc-500">Offline</p>
               </div>
-              <div className="rounded-xl bg-white/5 p-4 text-center">
-                <Wifi className="mx-auto mb-2 h-6 w-6 text-blue-400" />
-                <p className="text-2xl font-bold">{(100 - stats.habits.offlineRate).toFixed(1)}%</p>
+              <div className="rounded-xl bg-white/5 p-3 text-center sm:p-4">
+                <Wifi className="mx-auto mb-1.5 h-5 w-5 text-blue-400 sm:mb-2 sm:h-6 sm:w-6" />
+                <p className="text-xl font-bold sm:text-2xl">{(100 - stats.habits.offlineRate).toFixed(1)}%</p>
                 <p className="text-xs text-zinc-500">Online</p>
               </div>
             </div>
@@ -429,44 +439,48 @@ export function Dashboard({ stats }: DashboardProps) {
         {/* Archivos procesados */}
         {stats.coverage?.files && (
           <Card title="Archivos procesados" subtitle="Detalle de cada JSON en data/">
-            <div className="max-h-80 overflow-y-auto rounded-xl border border-white/5">
+            <ScrollTable minWidth={560}>
+              <div className="max-h-64 overflow-y-auto rounded-xl border border-white/5 sm:max-h-80">
               <table className="w-full text-left text-sm">
-                <thead className="sticky top-0 bg-[#141414]">
-                  <tr className="border-b border-white/5 text-xs uppercase tracking-wide text-zinc-500">
-                    <th className="px-4 py-3 font-medium">Archivo</th>
-                    <th className="px-4 py-3 font-medium">Tipo</th>
-                    <th className="px-4 py-3 font-medium text-right">Registros</th>
-                    <th className="px-4 py-3 font-medium text-right">Horas</th>
+                <thead className="sticky top-0 z-10 bg-[#141414]">
+                  <tr className="border-b border-white/5 text-[10px] uppercase tracking-wide text-zinc-500 sm:text-xs">
+                    <th className="px-3 py-2.5 font-medium sm:px-4 sm:py-3">Archivo</th>
+                    <th className="px-2 py-2.5 font-medium sm:px-4 sm:py-3">Tipo</th>
+                    <th className="px-2 py-2.5 font-medium text-right sm:px-4 sm:py-3">Reg.</th>
+                    <th className="px-2 py-2.5 font-medium text-right sm:px-4 sm:py-3">Horas</th>
                   </tr>
                 </thead>
                 <tbody>
                   {stats.coverage.files.map((f) => (
-                    <tr key={f.file} className="border-b border-white/5 last:border-0 hover:bg-white/5">
-                      <td className="px-4 py-2 font-mono text-xs text-zinc-300">{f.file}</td>
-                      <td className="px-4 py-2 text-zinc-400">{f.type}</td>
-                      <td className="px-4 py-2 text-right text-zinc-300">
+                    <tr key={f.file} className="border-b border-white/5 last:border-0 active:bg-white/5">
+                      <td className="max-w-[140px] truncate px-3 py-2 font-mono text-[10px] text-zinc-300 sm:max-w-none sm:px-4 sm:text-xs">
+                        {f.file}
+                      </td>
+                      <td className="px-2 py-2 text-xs text-zinc-400 sm:px-4">{f.type}</td>
+                      <td className="px-2 py-2 text-right text-xs text-zinc-300 sm:px-4 sm:text-sm">
                         {f.processed.toLocaleString("es-ES")}
                       </td>
-                      <td className="px-4 py-2 text-right text-blue-400">{f.hours} h</td>
+                      <td className="px-2 py-2 text-right text-xs text-blue-400 sm:px-4 sm:text-sm">{f.hours} h</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            </div>
+              </div>
+            </ScrollTable>
           </Card>
         )}
 
         {/* Footer info */}
-        <footer className="border-t border-white/5 pt-8 pb-12 text-center text-sm text-zinc-600">
-          <p className="flex items-center justify-center gap-2">
+        <footer className="border-t border-white/5 px-1 pt-6 pb-10 text-center text-xs text-zinc-600 sm:pt-8 sm:pb-12 sm:text-sm">
+          <p className="flex flex-wrap items-center justify-center gap-2">
             <Headphones className="h-4 w-4" />
             Datos del historial extendido de Spotify (Extended Streaming History)
           </p>
-          <p className="mt-2">
+          <p className="mt-2 px-2 leading-relaxed">
             Campos analizados: ts, ms_played, plataforma, país, metadatos, podcasts, audiolibros,
             reason_start/end, shuffle, skipped, offline, incognito_mode
           </p>
-          <p className="mt-1 flex items-center justify-center gap-2 text-xs">
+          <p className="mt-2 flex flex-wrap items-center justify-center gap-2 text-[11px] sm:text-xs">
             <Calendar className="h-3 w-3" />
             <Mic2 className="h-3 w-3" />
             Procesado localmente — tus datos no salen de tu máquina
