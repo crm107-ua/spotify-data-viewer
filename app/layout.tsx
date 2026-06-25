@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Spotify Data Viewer — Tu historial de streaming",
+  title: "Spotify Data Viewer — Your streaming history",
   description:
-    "Dashboard profesional con tu historial extendido de streaming de Spotify",
+    "Local dashboard that visualizes your Spotify extended streaming history: plays, hours, artists, and trends over the years.",
 };
 
 export const viewport: Viewport = {
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="en">
       <body className="min-h-screen overflow-x-hidden antialiased">{children}</body>
     </html>
   );

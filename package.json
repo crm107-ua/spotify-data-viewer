@@ -2,6 +2,7 @@
   "name": "spotify-data-viewer",
   "version": "1.0.0",
   "private": true,
+  "description": "Local dashboard that visualizes your Spotify extended streaming history: plays, hours, artists, and trends over the years.",
   "scripts": {
     "aggregate": "node scripts/aggregate-data.mjs",
     "enrich-genres": "node scripts/enrich-genres.mjs",

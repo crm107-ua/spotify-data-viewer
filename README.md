@@ -1,58 +1,60 @@
 # Spotify Data Viewer
 
-![Vista previa del dashboard](./public/images/principal.png)
+![Dashboard preview](./public/images/principal.png)
 
-Dashboard local y privado para explorar tu **historial extendido de streaming de Spotify**. Procesa tus archivos JSON, genera estadísticas y las muestra en una interfaz visual — sin subir tus datos a ningún servidor.
+> **About:** Local dashboard that visualizes your Spotify extended streaming history: plays, hours, artists, and trends over the years.
+
+A local, private dashboard to explore your **Spotify Extended Streaming History**. It processes your JSON files, generates statistics, and displays them in a visual interface — without uploading your data to any server.
 
 ---
 
-## ¿Qué puedes ver?
+## What you can see
 
-| Sección | Descripción |
+| Section | Description |
 |---------|-------------|
-| **Resumen** | Reproducciones totales, horas escuchadas, artistas, álbumes y podcasts |
-| **Evolución anual** | Reproducciones y horas por año (2015 → hoy) |
-| **Tendencia mensual** | Actividad mes a mes |
-| **Rankings** | Top 50 artistas, canciones y álbumes (por plays y por tiempo) |
-| **Plataformas y países** | iOS, Android, macOS, código de país de conexión |
-| **Hábitos** | Skip rate, shuffle, offline, sesión privada |
-| **Patrones** | Hora del día y día de la semana |
-| **Géneros** *(opcional)* | Tendencia por género a lo largo de los años — requiere API de Spotify |
+| **Overview** | Total plays, hours listened, artists, albums, and podcasts |
+| **Yearly evolution** | Plays and hours per year (2015 → today) |
+| **Monthly trend** | Activity month by month |
+| **Rankings** | Top 50 artists, tracks, and albums (by plays and by listening time) |
+| **Platforms & countries** | iOS, Android, macOS, connection country code |
+| **Habits** | Skip rate, shuffle, offline, private session |
+| **Patterns** | Time of day and day of the week |
+| **Genres** *(optional)* | Genre trends over the years — requires Spotify API |
 
-> Tus datos **nunca salen de tu ordenador**. Todo se procesa en local.
-
----
-
-## Requisitos
-
-- [Node.js](https://nodejs.org/) **18 o superior**
-- Tu exportación de **Extended Streaming History** de Spotify (paso obligatorio antes de usar la app)
+> Your data **never leaves your computer**. Everything is processed locally.
 
 ---
 
-## Paso 0 — Solicita tus datos a Spotify (obligatorio)
+## Requirements
 
-**Sin este paso la app no tiene nada que mostrar.** Spotify no comparte tu historial automáticamente: debes pedirlo tú desde su página de privacidad.
+- [Node.js](https://nodejs.org/) **18 or higher**
+- Your **Extended Streaming History** export from Spotify (required before using the app)
 
-### ¿Qué es esa página?
+---
 
-En [spotify.com/es/account/privacy/](https://www.spotify.com/es/account/privacy/) (Privacidad de la cuenta) Spotify te permite **descargar una copia de tus datos personales**, tal como exige el RGPD. Ahí verás distintos paquetes de datos; el que necesitas se llama **Extended streaming history** (Historial de streaming extendido).
+## Step 0 — Request your data from Spotify (required)
 
-Ese paquete incluye **cada reproducción** de tu cuenta (canciones, podcasts, vídeo, etc.) con fecha, duración, plataforma, país y más metadatos en archivos JSON.
+**Without this step the app has nothing to show.** Spotify does not share your history automatically — you must request it from their privacy page.
 
-### Cómo solicitarlo (paso a paso)
+### What is that page?
 
-1. Entra en **[Privacidad de la cuenta de Spotify](https://www.spotify.com/es/account/privacy/)** e inicia sesión.
-2. Baja hasta la sección **Descargar tus datos** (o *Download your data*).
-3. Marca la casilla **Extended streaming history** / *Historial de streaming extendido*.
-   - No confundir con *Account data* o *Streaming history* básico: necesitas el **extendido**.
-4. Pulsa **Solicitar datos** / *Request data*.
-5. Spotify preparará el paquete. **Puede tardar desde unos días hasta 30 días**; te avisarán por email.
-6. Cuando llegue el correo, abre el enlace de descarga y guarda el **archivo ZIP** en tu ordenador.
+At [spotify.com/account/privacy/](https://www.spotify.com/account/privacy/) (Account Privacy), Spotify lets you **download a copy of your personal data**, as required by GDPR. You will see several data packages; the one you need is called **Extended streaming history**.
 
-### Qué contiene el ZIP
+That package includes **every play** on your account (songs, podcasts, video, etc.) with date, duration, platform, country, and more metadata in JSON files.
 
-Al descomprimirlo verás una carpeta con archivos como:
+### How to request it (step by step)
+
+1. Go to **[Spotify Account Privacy](https://www.spotify.com/account/privacy/)** and sign in.
+2. Scroll to **Download your data**.
+3. Check **Extended streaming history**.
+   - Do not confuse it with *Account data* or basic *Streaming history* — you need the **extended** export.
+4. Click **Request data**.
+5. Spotify will prepare the package. **It can take from a few days up to 30 days**; they will notify you by email.
+6. When the email arrives, open the download link and save the **ZIP file** on your computer.
+
+### What the ZIP contains
+
+When you unzip it, you will see a folder with files like:
 
 ```
 MyData/
@@ -64,32 +66,32 @@ MyData/
 └── ...
 ```
 
-Cada JSON es una lista de reproducciones. Spotify parte el historial en varios archivos (~12 MB cada uno) si tienes muchas escuchas.
+Each JSON file is a list of plays. Spotify splits the history into multiple files (~12 MB each) if you have a lot of listening data.
 
 ---
 
-## Inicio rápido
+## Quick start
 
-### 1. Clona o descarga el proyecto
+### 1. Clone or download the project
 
 ```bash
 git clone https://github.com/crm107-ua/spotify-data-viewer.git
 cd spotify-data-viewer
 ```
 
-### 2. Instala dependencias
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Importa tus datos en la app
+### 3. Import your data into the app
 
-Cuando tengas el ZIP de Spotify descargado:
+Once you have downloaded the Spotify ZIP:
 
-1. **Descomprime** el archivo ZIP en cualquier carpeta.
-2. **Copia todos los archivos** `Streaming_History_*.json` a la carpeta `data/` de este proyecto.
-3. La estructura debe quedar así:
+1. **Unzip** the archive to any folder.
+2. **Copy all** `Streaming_History_*.json` files into this project's `data/` folder.
+3. The structure should look like this:
 
 ```
 spotify-data-viewer/
@@ -98,102 +100,102 @@ spotify-data-viewer/
     ├── Streaming_History_Audio_2016.json
     ├── Streaming_History_Audio_2016_1.json
     ├── Streaming_History_Video_2024.json
-    ├── ReadMeFirst_ExtendedStreamingHistory.pdf   ← opcional (documentación de campos)
+    ├── ReadMeFirst_ExtendedStreamingHistory.pdf   ← optional (field documentation)
     └── ...
 ```
 
-**Importante al importar:**
+**Important when importing:**
 
-| Regla | Detalle |
-|-------|---------|
-| Nombres de archivo | No los renombres; deben empezar por `Streaming_History_` |
-| Cantidad | Es normal tener muchos archivos (audio + vídeo, varios por año) |
-| PDF | El `ReadMeFirst_*.pdf` es opcional; la app lee solo los JSON |
-| Actualizar datos | Vuelve a solicitar el historial en Spotify, copia los JSON nuevos y ejecuta `npm run aggregate` |
-| Privacidad | La carpeta `data/` está en `.gitignore` — tus datos no se suben a Git |
+| Rule | Detail |
+|------|--------|
+| File names | Do not rename them; they must start with `Streaming_History_` |
+| File count | Many files is normal (audio + video, several per year) |
+| PDF | `ReadMeFirst_*.pdf` is optional; the app only reads JSON files |
+| Updating data | Request a new export from Spotify, copy the new JSON files, and run `npm run aggregate` |
+| Privacy | The `data/` folder is in `.gitignore` — your data is not pushed to Git |
 
-### 4. Arranca el dashboard
+### 4. Start the dashboard
 
 ```bash
 npm run dev
 ```
 
-Abre **http://localhost:3000** en el navegador.
+Open **http://localhost:3000** in your browser.
 
-La primera vez procesará todos los JSON y generará `public/stats.json`. Si añades datos nuevos, vuelve a ejecutar `npm run aggregate` o reinicia con `npm run dev`.
+The first run will process all JSON files and generate `public/stats.json`. If you add new data, run `npm run aggregate` again or restart with `npm run dev`.
 
 ---
 
-## Géneros (opcional)
+## Genres (optional)
 
-El export de Spotify **no incluye géneros musicales**. Para ver la sección *"Tendencia de géneros a lo largo de los años"*:
+The Spotify export **does not include music genres**. To see the *"Genre trends over the years"* section:
 
-1. Copia el archivo de ejemplo:
+1. Copy the example file:
    ```bash
    cp .env.example .env
    ```
-2. Crea una app en el [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
-3. Añade tus credenciales al `.env`:
+2. Create an app in the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
+3. Add your credentials to `.env`:
    ```env
-   SPOTIFY_CLIENT_ID=tu_client_id
-   SPOTIFY_CLIENT_SECRET=tu_client_secret
+   SPOTIFY_CLIENT_ID=your_client_id
+   SPOTIFY_CLIENT_SECRET=your_client_secret
    ```
-4. Ejecuta de nuevo:
+4. Run again:
    ```bash
    npm run aggregate
    npm run dev
    ```
 
-La primera consulta a la API puede tardar varios minutos (se cachean los géneros en `data/genre-cache.json`). Las siguientes ejecuciones serán rápidas.
+The first API run can take several minutes (genres are cached in `data/genre-cache.json`). Later runs are fast.
 
-**Sin `.env` o sin credenciales Spotify → la sección de géneros no aparece.** El resto del dashboard funciona igual.
+**Without `.env` or Spotify credentials → the genres section is hidden.** The rest of the dashboard works the same.
 
 ---
 
-## Scripts disponibles
+## Available scripts
 
-| Comando | Descripción |
+| Command | Description |
 |---------|-------------|
-| `npm run dev` | Procesa datos + inicia servidor de desarrollo |
-| `npm run build` | Procesa datos + genera build de producción |
-| `npm start` | Sirve el build (ejecutar `build` antes) |
-| `npm run aggregate` | Solo procesa los JSON y actualiza estadísticas |
-| `npm run enrich-genres` | Solo actualiza la caché de géneros (requiere `.env`) |
+| `npm run dev` | Process data + start development server |
+| `npm run build` | Process data + create production build |
+| `npm start` | Serve the build (run `build` first) |
+| `npm run aggregate` | Process JSON files and update statistics only |
+| `npm run enrich-genres` | Update genre cache only (requires `.env`) |
 
 ---
 
-## Cómo funciona
+## How it works
 
 ```
-data/*.json  →  scripts/aggregate-data.mjs  →  public/stats.json  →  Dashboard Next.js
+data/*.json  →  scripts/aggregate-data.mjs  →  public/stats.json  →  Next.js Dashboard
                       ↑
-              data/genre-cache.json (opcional, vía API Spotify)
+              data/genre-cache.json (optional, via Spotify API)
 ```
 
-1. **Lectura** — Recorre todos los `Streaming_History_*.json` en `data/`.
-2. **Agregación** — Calcula totales, rankings, tendencias anuales/mensuales, hábitos, etc.
-3. **Géneros** *(si hay credenciales)* — Consulta la API de Spotify por artista y guarda caché local.
-4. **Visualización** — Next.js lee `public/stats.json` y renderiza el dashboard.
+1. **Read** — Scans all `Streaming_History_*.json` files in `data/`.
+2. **Aggregate** — Computes totals, rankings, yearly/monthly trends, habits, etc.
+3. **Genres** *(if credentials are set)* — Queries the Spotify API per artist and caches locally.
+4. **Display** — Next.js reads `public/stats.json` and renders the dashboard.
 
 ---
 
-## Campos del historial que se analizan
+## History fields analyzed
 
-Basado en el [Extended Streaming History](https://support.spotify.com/account/privacy/) de Spotify:
+Based on Spotify's [Extended Streaming History](https://support.spotify.com/account/privacy/):
 
-`ts` · `ms_played` · `platform` · `conn_country` · metadatos de track/álbum/artista · podcasts · audiolibros · `reason_start` / `reason_end` · `shuffle` · `skipped` · `offline` · `incognito_mode`
-
----
-
-## Privacidad
-
-- Los archivos de `data/` y `.env` están en `.gitignore` — no los subas a Git.
-- El procesamiento es 100 % local.
-- La API de Spotify solo se usa para obtener géneros de artistas (opcional); no se envía tu historial completo.
+`ts` · `ms_played` · `platform` · `conn_country` · track/album/artist metadata · podcasts · audiobooks · `reason_start` / `reason_end` · `shuffle` · `skipped` · `offline` · `incognito_mode`
 
 ---
 
-## Producción
+## Privacy
+
+- `data/` and `.env` are in `.gitignore` — do not commit them.
+- Processing is 100% local.
+- The Spotify API is only used to fetch artist genres (optional); your full history is not sent.
+
+---
+
+## Production
 
 ```bash
 npm run build
@@ -202,18 +204,18 @@ npm start
 
 ---
 
-## Solución de problemas
+## Troubleshooting
 
-| Problema | Solución |
-|----------|----------|
-| No tengo datos / dashboard vacío | Solicita **Extended streaming history** en [Privacidad de Spotify](https://www.spotify.com/es/account/privacy/) y espera el email |
-| Pantalla vacía o error al cargar | Ejecuta `npm run aggregate` y comprueba que hay JSON en `data/` |
-| No aparecen géneros | Crea `.env` con `SPOTIFY_CLIENT_ID` y `SPOTIFY_CLIENT_SECRET` |
-| Datos desactualizados | Añade los JSON nuevos a `data/` y ejecuta `npm run aggregate` |
-| La primera vez con géneros tarda mucho | Es normal; consulta ~11k artistas. La caché acelera las siguientes veces |
+| Issue | Solution |
+|-------|----------|
+| No data / empty dashboard | Request **Extended streaming history** at [Spotify Privacy](https://www.spotify.com/account/privacy/) and wait for the email |
+| Blank screen or load error | Run `npm run aggregate` and check that JSON files exist in `data/` |
+| Genres not showing | Create `.env` with `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` |
+| Outdated data | Add new JSON files to `data/` and run `npm run aggregate` |
+| First genre fetch is slow | Normal; it queries thousands of artists. The cache speeds up later runs |
 
 ---
 
-## Licencia
+## License
 
-Proyecto de uso personal. Los datos de streaming son tuyos; este tool solo los visualiza localmente.
+Personal use project. Your streaming data belongs to you; this tool only visualizes it locally.
