@@ -26,7 +26,45 @@ Dashboard local y privado para explorar tu **historial extendido de streaming de
 ## Requisitos
 
 - [Node.js](https://nodejs.org/) **18 o superior**
-- Tu exportación de **Extended Streaming History** de Spotify
+- Tu exportación de **Extended Streaming History** de Spotify (paso obligatorio antes de usar la app)
+
+---
+
+## Paso 0 — Solicita tus datos a Spotify (obligatorio)
+
+**Sin este paso la app no tiene nada que mostrar.** Spotify no comparte tu historial automáticamente: debes pedirlo tú desde su página de privacidad.
+
+### ¿Qué es esa página?
+
+En [spotify.com/es/account/privacy/](https://www.spotify.com/es/account/privacy/) (Privacidad de la cuenta) Spotify te permite **descargar una copia de tus datos personales**, tal como exige el RGPD. Ahí verás distintos paquetes de datos; el que necesitas se llama **Extended streaming history** (Historial de streaming extendido).
+
+Ese paquete incluye **cada reproducción** de tu cuenta (canciones, podcasts, vídeo, etc.) con fecha, duración, plataforma, país y más metadatos en archivos JSON.
+
+### Cómo solicitarlo (paso a paso)
+
+1. Entra en **[Privacidad de la cuenta de Spotify](https://www.spotify.com/es/account/privacy/)** e inicia sesión.
+2. Baja hasta la sección **Descargar tus datos** (o *Download your data*).
+3. Marca la casilla **Extended streaming history** / *Historial de streaming extendido*.
+   - No confundir con *Account data* o *Streaming history* básico: necesitas el **extendido**.
+4. Pulsa **Solicitar datos** / *Request data*.
+5. Spotify preparará el paquete. **Puede tardar desde unos días hasta 30 días**; te avisarán por email.
+6. Cuando llegue el correo, abre el enlace de descarga y guarda el **archivo ZIP** en tu ordenador.
+
+### Qué contiene el ZIP
+
+Al descomprimirlo verás una carpeta con archivos como:
+
+```
+MyData/
+├── Streaming_History_Audio_2015.json
+├── Streaming_History_Audio_2016.json
+├── Streaming_History_Audio_2016_1.json
+├── Streaming_History_Video_2024.json
+├── ReadMeFirst_ExtendedStreamingHistory.pdf
+└── ...
+```
+
+Cada JSON es una lista de reproducciones. Spotify parte el historial en varios archivos (~12 MB cada uno) si tienes muchas escuchas.
 
 ---
 
@@ -35,7 +73,7 @@ Dashboard local y privado para explorar tu **historial extendido de streaming de
 ### 1. Clona o descarga el proyecto
 
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/crm107-ua/spotify-data-viewer.git
 cd spotify-data-viewer
 ```
 
@@ -45,11 +83,13 @@ cd spotify-data-viewer
 npm install
 ```
 
-### 3. Importa tus datos
+### 3. Importa tus datos en la app
 
-1. Solicita tu historial en [Spotify → Privacidad de la cuenta](https://www.spotify.com/account/privacy/) → **Extended streaming history**.
-2. Cuando llegue el correo, descarga el ZIP y descomprímelo.
-3. Copia **todos los archivos JSON** dentro de la carpeta `data/` del proyecto:
+Cuando tengas el ZIP de Spotify descargado:
+
+1. **Descomprime** el archivo ZIP en cualquier carpeta.
+2. **Copia todos los archivos** `Streaming_History_*.json` a la carpeta `data/` de este proyecto.
+3. La estructura debe quedar así:
 
 ```
 spotify-data-viewer/
@@ -58,14 +98,19 @@ spotify-data-viewer/
     ├── Streaming_History_Audio_2016.json
     ├── Streaming_History_Audio_2016_1.json
     ├── Streaming_History_Video_2024.json
-    ├── ReadMeFirst_ExtendedStreamingHistory.pdf   ← opcional
+    ├── ReadMeFirst_ExtendedStreamingHistory.pdf   ← opcional (documentación de campos)
     └── ...
 ```
 
-**Importante:**
-- Solo hacen falta archivos que empiecen por `Streaming_History_`.
-- Puedes tener muchos archivos (Spotify divide el historial en trozos de ~12 MB).
-- No renombres los archivos; el script los detecta automáticamente.
+**Importante al importar:**
+
+| Regla | Detalle |
+|-------|---------|
+| Nombres de archivo | No los renombres; deben empezar por `Streaming_History_` |
+| Cantidad | Es normal tener muchos archivos (audio + vídeo, varios por año) |
+| PDF | El `ReadMeFirst_*.pdf` es opcional; la app lee solo los JSON |
+| Actualizar datos | Vuelve a solicitar el historial en Spotify, copia los JSON nuevos y ejecuta `npm run aggregate` |
+| Privacidad | La carpeta `data/` está en `.gitignore` — tus datos no se suben a Git |
 
 ### 4. Arranca el dashboard
 
@@ -161,6 +206,7 @@ npm start
 
 | Problema | Solución |
 |----------|----------|
+| No tengo datos / dashboard vacío | Solicita **Extended streaming history** en [Privacidad de Spotify](https://www.spotify.com/es/account/privacy/) y espera el email |
 | Pantalla vacía o error al cargar | Ejecuta `npm run aggregate` y comprueba que hay JSON en `data/` |
 | No aparecen géneros | Crea `.env` con `SPOTIFY_CLIENT_ID` y `SPOTIFY_CLIENT_SECRET` |
 | Datos desactualizados | Añade los JSON nuevos a `data/` y ejecuta `npm run aggregate` |
